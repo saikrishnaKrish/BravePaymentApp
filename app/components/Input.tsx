@@ -1,24 +1,34 @@
 import React from 'react';
-import { TextInput, StyleSheet, TextInputProps } from 'react-native';
+import { TextInput, StyleSheet } from 'react-native';
 
-interface InputProps extends TextInputProps {
+interface InputProps {
   placeholder: string;
+  value: string;
+  onChangeText: (text: string) => void;
+  secureTextEntry?: boolean;
 }
 
-const Input: React.FC<InputProps> = ({ placeholder, ...props }) => {
-  return <TextInput style={styles.input} placeholder={placeholder} {...props} />;
+const Input: React.FC<InputProps> = ({ placeholder, value, onChangeText, secureTextEntry = false }) => {
+  return (
+    <TextInput
+      style={styles.input}
+      placeholder={placeholder}
+      value={value}
+      onChangeText={onChangeText}
+      secureTextEntry={secureTextEntry}
+    />
+  );
 };
 
 const styles = StyleSheet.create({
   input: {
-    height: 50,
     borderWidth: 1,
     borderColor: '#ccc',
+    padding: 12,
+    marginVertical: 10,
     borderRadius: 8,
-    paddingHorizontal: 16,
-    marginBottom: 16,
+    fontSize: 16,
   },
 });
 
 export default Input;
-

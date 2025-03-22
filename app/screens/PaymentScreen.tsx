@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
 import PaymentCard from '../components/PaymentCard';
 import CategorySelector from '../components/CategorySelector';
-import Button from '../components/Button';
 
 // Mock Data
 const mockPayments = [
@@ -11,8 +10,11 @@ const mockPayments = [
   { id: '3', amount: 200, category: 'Business', date: '2025-03-10' },
 ];
 
+const initialCategories = ['Clothing', 'Travel', 'Business', 'Other'];
+
 const PaymentScreen = () => {
   const [payments, setPayments] = useState(mockPayments);
+  const [categories, setCategories] = useState(initialCategories);
 
   const handleCategoryChange = (id: string, newCategory: string) => {
     const updatedPayments = payments.map(payment =>
@@ -21,19 +23,27 @@ const PaymentScreen = () => {
     setPayments(updatedPayments);
   };
 
-  const renderPaymentItem = ({ item }: { item: typeof mockPayments[0] }) => (
-    <PaymentCard
-      amount={item.amount}
-      category={item.category}
-      date={item.date}
-    >
-      <CategorySelector
-              selectedCategory={item.category}
-              onCategoryChange={(newCategory: string) => handleCategoryChange(item.id, newCategory)} categories={[]} onAddCategory={function (category: string): void {
-                  throw new Error('Function not implemented.');
-              } }      />
-    </PaymentCard>
-  );
+  const handleAddCategory = (category: string) => {
+    if (category.trim() !== '' && !categories.includes(category)) {
+      setCategories((prev) => [...prev, category]);
+    }
+  };
+const renderPaymentItem = ({ item }: { item: typeof mockPayments[0] }) => (
+  <PaymentCard
+    amount={item.amount}
+    category={item.category}
+    date={item.date}
+    categories={categories}
+    onCategoryChange={(newCategory) => handleCategoryChange(item.id, newCategory)}
+  >
+    <CategorySelector
+    categories={categories}
+      selectedCategory={item.category}
+      onCategoryChange={(newCategory) => handleCategoryChange(item.id, newCategory)}
+      onAddCategory={handleAddCategory}
+    />
+  </PaymentCard>
+);
 
   return (
     <View style={styles.container}>

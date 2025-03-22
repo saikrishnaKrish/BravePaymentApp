@@ -3,8 +3,14 @@ import { View, Text, Button, StyleSheet } from 'react-native';
 import { AuthContext } from '../contexts/AuthContext';
 
 const ProfileScreen = () => {
-  const { user, logout } = useContext(AuthContext);
+    const context = useContext(AuthContext);
 
+    if (!context) {
+      return <Text>Error: Auth context is missing</Text>;
+    }
+  
+    const { user, logout } = context;
+  
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Profile</Text>
